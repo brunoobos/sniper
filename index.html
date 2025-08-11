@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concursos Policiais</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Menu Superior */
+        .top-menu {
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            color: white;
+            font-weight: bold;
+            font-size: 1.5em;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links li {
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 20px 15px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #34495e;
+        }
+        
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .menu-toggle {
+            display: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 15px;
+        }
+        
+        header {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        
+        /* Carrossel */
+        .carousel-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            display: block;
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .carousel-caption h2 {
+            margin: 0;
+            font-size: 2em;
+            color: #fff;
+        }
+        
+        .carousel-caption p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+        }
+        
+        .carousel-nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .carousel-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background-color: #e74c3c;
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.5em;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-btn:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .carousel-btn.prev {
+            left: 10px;
+        }
+        
+        .carousel-btn.next {
+            right: 10px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .states-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .state-btn {
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .state-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .state-info {
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .state-info h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .category {
+            margin-bottom: 20px;
+        }
+        
+        .category h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .links a {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            transition: all 0.3s;
+        }
+        
+        .links a:hover {
+            background-color: #e0e0e0;
+            transform: translateX(5px);
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .search-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .search-input {
+            padding: 10px 15px;
+            width: 300px;
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: #2c3e50;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                text-align: center;
+            }
+            
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+            }
+            
+            .states-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .carousel-slide img {
+                height: 300px;
+            }
+            
+            .carousel-caption h2 {
+                font-size: 1.5em;
+            }
+            
+            .carousel-caption p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Superior -->
+    <div class="top-menu">
+        <a href="#" class="logo">Concursos Policiais</a>
+        <div class="menu-toggle">☰</div>
+        <ul class="nav-links">
+            <li><a href="#">Início</a></li>
+            <li class="dropdown">
+                <a href="#">Mentores</a>
+                <div class="dropdown-content">
+                </div>
+            </li>
+            <li><a href="#">Contato</a></li>
+        </ul>
+    </div>
+    
+    <header>
+        <h1> Ponto 40 Carreiras Policiais</h1>
+        <p>Selecione um estado para ver os informações do concurso</p>
+    </header>
+    
+    <div class="container">
+        <!-- Carrossel de Destaque -->
+        <div class="carousel-container">
+            <div class="carousel" id="carousel">
+                <div class="carousel-slide">
+                    <img src="images/prf.jpg" alt="Turma de alunos estudando">
+                    <div class="carousel-caption">
+                        <h2>Prepare-se com os Melhores Professores</h2>
+                        <p>Mentoria 100% focada em concursos policiais</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/prf.jpg" alt="PRF">
+                    <div class="carousel-caption">
+                        <h2>Roteiro de estudos e bizu</h2>
+                        <p>Conteúdo sempre de acordo com o seu concurso</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="images/prf.jpg" alt="Alunos aprovados">
+                    <div class="carousel-caption">
+                        <h2>Alto Índice de Aprovação</h2>
+                        <p>Mais de 30 alunos aprovados em 2025</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+            
+            <div class="carousel-nav" id="carouselNav">
+                <span class="carousel-dot active" data-slide="0"></span>
+                <span class="carousel-dot" data-slide="1"></span>
+                <span class="carousel-dot" data-slide="2"></span>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Pesquisar concursos...">
+        </div>
+        
+        <div class="states-container">
+            <!-- Botões para cada estado em ordem alfabética -->
+            <button class="state-btn" data-state="AC">Acre</button>
+            <button class="state-btn" data-state="AL">Alagoas</button>
+            <button class="state-btn" data-state="AP">Amapá</button>
+            <button class="state-btn" data-state="AM">Amazonas</button>
+            <button class="state-btn" data-state="BA">Bahia</button>
+            <button class="state-btn" data-state="CE">Ceará</button>
+            <button class="state-btn" data-state="DF">Distrito Federal</button>
+            <button class="state-btn" data-state="ES">Espírito Santo</button>
+            <button class="state-btn" data-state="GO">Goiás</button>
+            <button class="state-btn" data-state="MA">Maranhão</button>
+            <button class="state-btn" data-state="MT">Mato Grosso</button>
+            <button class="state-btn" data-state="MS">Mato Grosso do Sul</button>
+            <button class="state-btn" data-state="MG">Minas Gerais</button>
+            <button class="state-btn" data-state="PA">Pará</button>
+            <button class="state-btn" data-state="PB">Paraíba</button>
+            <button class="state-btn" data-state="PR">Paraná</button>
+            <button class="state-btn" data-state="PE">Pernambuco</button>
+            <button class="state-btn" data-state="PI">Piauí</button>
+            <button class="state-btn" data-state="RJ">Rio de Janeiro</button>
+            <button class="state-btn" data-state="RN">Rio Grande do Norte</button>
+            <button class="state-btn" data-state="RS">Rio Grande do Sul</button>
+            <button class="state-btn" data-state="RO">Rondônia</button>
+            <button class="state-btn" data-state="RR">Roraima</button>
+            <button class="state-btn" data-state="SC">Santa Catarina</button>
+            <button class="state-btn" data-state="SP">São Paulo</button>
+            <button class="state-btn" data-state="SE">Sergipe</button>
+            <button class="state-btn" data-state="TO">Tocantins</button>
+            <button class="state-btn" data-state="TO">FEDERAL</button>
+        </div>
+        
+        <div id="stateInfo" class="state-info">
+            <h2 id="stateName">Estado</h2>
+            
+            <div class="category">
+                <h3>Polícia Civil</h3>
+                <div class="links" id="civilLinks">
+                    <!-- Links serão adicionados dinamicamente -->
+                </div>
+            </div>
+            
+            <div class="category">
+                <h3>Polícia Militar</h3>
+                <div class="links" id="militarLinks">
+                    <!-- Links serão adicionados dinamicamente -->
+                </div>
+            </div>
+            
+            <div class="category">
+                <h3>Polícia Judicial</h3>
+                <div class="links" id="judicialLinks">
+                    <!-- Links serão adicionados dinamicamente -->
+                </div>
+            </div>
+            
+            <div class="category">
+                <h3>Polícia Legislativa</h3>
+                <div class="links" id="legislativaLinks">
+                    <!-- Links serão adicionados dinamicamente -->
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>Polícia Penal</h3>
+                <div class="links" id="judicialLinks">
+                    <!-- Links serão adicionados dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Atualizado em <span id="updateDate"></span> | Dados de concursos policiais no Brasil</p>
+        <p>© 2025 Sniper Concursos Policiais - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Data de atualização
+        document.getElementById('updateDate').textContent = new Date().toLocaleDateString('pt-BR');
+        
+        // Menu responsivo
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+        
+        // Dados de exemplo (substitua pelos links reais)
+        const stateLinks = {
+            'AC': {
+                judicial: [
+                    { text: 'TRT-AC', url: '#' },
+                    { text: 'TRF-AC', url: '#' },
+                    { text: 'TRE-AC', url: '#' }
+                ]
+            
+            },
+            'SP': {
+                civil: [
+                    { text: 'PC/SP Concurso', url: 'concurso/pc-sp.html' }
+                    
+                ],
+                militar: [
+                    { text: 'PM/SP Concurso', url: 'concurso/pm-sp.html' }
+                
+                ],
+                judicial: [
+                { text: 'TRT-SP', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TRF-SP', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TRE-SP', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TJ-SP', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TRT-15 (Campinas)', url: 'https://www.policiacivil.rj.gov.br' }
+                ],
+                legislativa: [
+                    { text: 'ALESP Concursos', url: 'https://www.al.sp.gov.br' }
+                ]
+            },
+            'RJ': {
+                judicial: [
+                    { text: 'TRT-RJ', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TRF-RJ', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TRE-RJ', url: 'https://www.policiacivil.rj.gov.br' },
+                    { text: 'TJ-RJ', url: 'https://www.policiacivil.rj.gov.br' }
+            ], 
+                militar: [
+                    { text: 'PM/RJ Concurso', url: 'https://www.policiamilitar.rj.gov.br' },
+                    { text: 'BM/RJ Vagas', url: 'https://www.bombeiros.rj.gov.br' }
+                ],
+                civil: [
+                    { text: 'TJ/RJ Concursos', url: 'https://www.tjrj.jus.br' }
+                ],
+                legislativa: [
+                    { text: 'ALERJ Oportunidades', url: 'https://www.alerj.rj.gov.br' }
+                ],
+                penal: [
+                    { text: 'ALERJ Oportunidades', url: 'https://www.alerj.rj.gov.br' }
+                ]
+            },
+            'ES': {
+                legislativa: [
+                    { text: 'ALES', url: 'concurso/al-es.html' },
+                ]
+            
+            }
+            // Adicione os outros estados aqui...
+        };
+
+        // Adiciona eventos de clique para cada botão de estado
+        document.querySelectorAll('.state-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const stateId = this.getAttribute('data-state');
+                const stateName = this.textContent;
+                
+                // Atualiza o nome do estado
+                document.getElementById('stateName').textContent = stateName;
+                
+                // Limpa links anteriores
+                document.getElementById('civilLinks').innerHTML = '';
+                document.getElementById('militarLinks').innerHTML = '';
+                document.getElementById('judicialLinks').innerHTML = '';
+                document.getElementById('legislativaLinks').innerHTML = '';
+                
+                // Verifica se há links para este estado
+                if (stateLinks[stateId]) {
+                    const links = stateLinks[stateId];
+                    
+                    // Adiciona links para Polícia Civil
+                    if (links.civil && links.civil.length > 0) {
+                        links.civil.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.textContent = link.text;
+                            a.target = '_blank';
+                            document.getElementById('civilLinks').appendChild(a);
+                        });
+                    } else {
+                        document.getElementById('civilLinks').innerHTML = '<p>Nenhum concurso disponível no momento</p>';
+                    }
+                    
+                    // Adiciona links para Polícia Militar
+                    if (links.militar && links.militar.length > 0) {
+                        links.militar.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.textContent = link.text;
+                            a.target = '_blank';
+                            document.getElementById('militarLinks').appendChild(a);
+                        });
+                    } else {
+                        document.getElementById('militarLinks').innerHTML = '<p>Nenhum concurso disponível no momento</p>';
+                    }
+                    
+                    // Adiciona links para Judicial
+                    if (links.judicial && links.judicial.length > 0) {
+                        links.judicial.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.textContent = link.text;
+                            a.target = '_blank';
+                            document.getElementById('judicialLinks').appendChild(a);
+                        });
+                    } else {
+                        document.getElementById('judicialLinks').innerHTML = '<p>Nenhum concurso disponível no momento</p>';
+                    }
+                    
+                    // Adiciona links para Legislativa
+                    if (links.legislativa && links.legislativa.length > 0) {
+                        links.legislativa.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.textContent = link.text;
+                            a.target = '_blank';
+                            document.getElementById('legislativaLinks').appendChild(a);
+                        });
+                    } else {
+                        document.getElementById('legislativaLinks').innerHTML = '<p>Nenhum concurso disponível no momento</p>';
+                    }
+                } else {
+                    // Se não houver dados para o estado
+                    document.getElementById('civilLinks').innerHTML = '<p>Dados não disponíveis para este estado</p>';
+                    document.getElementById('militarLinks').innerHTML = '<p>Dados não disponíveis para este estado</p>';
+                    document.getElementById('judicialLinks').innerHTML = '<p>Dados não disponíveis para este estado</p>';
+                    document.getElementById('legislativaLinks').innerHTML = '<p>Dados não disponíveis para este estado</p>';
+                }
+                
+                // Mostra a seção de informações
+                document.getElementById('stateInfo').style.display = 'block';
+                
+                // Rola a página até a seção de informações
+                document.getElementById('stateInfo').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Função de pesquisa simples
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            document.querySelectorAll('.state-btn').forEach(btn => {
+                const stateName = btn.textContent.toLowerCase();
+                if (stateName.includes(searchTerm)) {
+                    btn.style.display = 'block';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+        });
+        
+        // Carrossel de Imagens
+        const carousel = document.getElementById('carousel');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        const slideCount = slides.length;
+        let slideInterval;
+        
+        // Inicia o carrossel
+        function startCarousel() {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slideCount;
+                updateCarousel();
+            }, 5000); // Muda a cada 5 segundos
+        }
+        
+        // Atualiza a posição do carrossel
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Atualiza os dots ativos
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // Navegação por dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                currentSlide = parseInt(this.getAttribute('data-slide'));
+                updateCarousel();
+                resetInterval();
+            });
+        });
+        
+        // Botões de navegação
+        prevBtn.addEventListener('click', function() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            updateCarousel();
+            resetInterval();
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateCarousel();
+            resetInterval();
+        });
+        
+        // Reinicia o intervalo do carrossel
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startCarousel();
+        }
+        
+        // Inicia o carrossel
+        startCarousel();
+    </script>
+</body>
+</html>
